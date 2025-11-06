@@ -176,7 +176,7 @@ window.resumeData = {
       id: "aws-cloud",
       name: "AWS Certified Cloud Practitioner",
       issuer: "AWS",
-      image: "assets/img/cloudPractioner.png",
+      image: "assets/img/CloudPractioner.png",
       url: "https://www.credly.com/badges/135f8aac-c563-4277-9d93-0dbc47b79a96/public_url"
     },
     {
