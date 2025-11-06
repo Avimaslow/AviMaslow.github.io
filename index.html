@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Avi Maslow – Interactive Resume</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    />
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-iPtn3VZWuW7FJcO3eN4sb3faUuS4cw/8XrZ2w6+5VgMiLQ0R6+7gZpLlJEU3bCwqV2bH/rjZr3g7xwT8r9j7Ww=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/reset.css" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body>
+    <!-- Starfield background (fades on scroll) -->
+    <div id="starfield"></div>
+
+    <!-- Page wrapper -->
+    <div class="page">
+        <!-- HEADER / NAV -->
+        <header class="site-header">
+            <div class="logo">AM</div>
+            <nav class="nav">
+                <button class="nav-toggle" aria-label="Toggle navigation">
+                    <span></span><span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="#hero" class="nav-link active">Home</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#experience" class="nav-link">Experience</a></li>
+                    <li><a href="#projects" class="nav-link">Projects</a></li>
+                    <li><a href="#skills" class="nav-link">Skills</a></li>
+                    <li><a href="#courses" class="nav-link">Courses</a></li>
+                    <li><a href="#research" class="nav-link">Research</a></li>
+                    <li><a href="#certificates" class="nav-link">Certificates</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+
+            </nav>
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </header>
+
+        <!-- HERO -->
+        <section id="hero" class="section hero">
+            <div class="hero-content">
+                <p class="hero-kicker">Columbia Student • Graduating Spring 2026</p>
+                <h1 class="hero-title">
+                    Hi, I'm <span class="accent">Avi Maslow</span>
+                </h1>
+                <h2 class="hero-subtitle">
+                    <span id="typedTitle"></span>
+                    <span class="cursor">|</span>
+                </h2>
+
+                <p class="hero-text">
+                    I build systems that are fast, reliable, and human-centered — from real-time trading engines
+                    to data-driven dashboards and cloud-native web apps.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="#projects" class="btn primary">View Projects</a>
+                    <a href="#experience" class="btn outline">Experience Timeline</a>
+                    <button id="viewResumeBtn" class="btn ghost">
+                        <i class="fa-solid fa-file-arrow-down"></i>
+                        Download Resume
+                    </button>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat" data-target="5">
+                        <span class="stat-number">0</span>+
+                        <span class="stat-label">Major Projects</span>
+                    </div>
+                    <div class="stat" data-target="3">
+                        <span class="stat-number">0</span>+
+                        <span class="stat-label">Cloud Platforms</span>
+                    </div>
+                    <div class="stat" data-target="8">
+                        <span class="stat-number">0</span>+
+                        <span class="stat-label">Tools &amp; Stacks</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-panel">
+                <!-- Profile hover card -->
+                <div class="hero-card">
+                    <h3>Live Profile Panel</h3>
+                    <p>Hover on a tag below to see quick info.</p>
+                    <div class="tag-grid">
+                        <button class="tag" data-profile="hft">C++ / HFT</button>
+                        <button class="tag" data-profile="cloud">AWS &amp; Cloud</button>
+                        <button class="tag" data-profile="data">Data &amp; Dashboards</button>
+                        <button class="tag" data-profile="human">Human-Centered</button>
+                    </div>
+                    <div class="profile-detail" id="profileDetail">
+                        Hover a tag to explore a focus area.
+                    </div>
+                </div>
+
+                <!-- Now working on mini-player -->
+                <div class="hero-player">
+                    <div class="hero-player-top">
+                        <span class="hero-player-time" id="workingTimeCurrent">0:00</span>
+                        <div class="hero-player-progress">
+                            <div class="hero-player-progress-track">
+                                <div class="hero-player-progress-fill" id="workingProgress"></div>
+                            </div>
+                        </div>
+                        <span class="hero-player-time" id="workingTimeRemaining">-3:22</span>
+                    </div>
+
+                    <div class="hero-player-label">Now working on</div>
+
+                    <div class="hero-player-main" id="heroPlayerMain">
+                        <div class="hero-player-title" id="workingTitle">Loading…</div>
+                        <div class="hero-player-subtitle" id="workingSubtitle"></div>
+                    </div>
+
+                    <div class="hero-player-controls">
+                        <button
+                            class="hero-player-arrow"
+                            id="workingPrev"
+                            aria-label="Previous project"
+                        >
+                            ‹
+                        </button>
+                        <button
+                            class="hero-player-arrow"
+                            id="workingNext"
+                            aria-label="Next project"
+                        >
+                            ›
+                        </button>
+                    </div>
+
+                    <div class="hero-player-meta">
+                        <span id="workingIndexText">1 / 1</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="section">
+            <div class="section-header">
+                <h2>About</h2>
+                <p>A quick snapshot of who I am and how I work.</p>
+            </div>
+
+            <div class="about-grid">
+                <article class="card about-card">
+                    <h3>Profile</h3>
+                    <p>
+                        I am a builder who lives at the intersection of systems, data, and people. I enjoy working on
+                        projects where technical depth and clear communication both matter.
+                    </p>
+                    <p>
+                        This site is fully static and interactive — a proof that even a resume can feel like an app.
+                    </p>
+                </article>
+
+                <article class="card about-card">
+                    <h3>Highlights</h3>
+                    <ul class="pill-list">
+                        <li class="pill">C++ / Python</li>
+                        <li class="pill">AWS / GCP</li>
+                        <li class="pill">PostgreSQL</li>
+                        <li class="pill">LLM &amp; NLP</li>
+                        <li class="pill">Power BI / Tableau</li>
+                    </ul>
+                    <p class="muted">
+                        All content here is placeholder — you can replace it with real resume data when ready.
+                    </p>
+                </article>
+
+                <article class="card about-card about-toggle-card">
+                    <div class="toggle-header">
+                        <h3>Working Style</h3>
+                        <div class="toggle-buttons">
+                            <button class="toggle-btn active" data-mode="builder">Builder</button>
+                            <button class="toggle-btn" data-mode="leader">Leader</button>
+                        </div>
+                    </div>
+                    <div id="workingStyleText" class="toggle-body">
+                        I like designing systems from first principles, understanding the data flow, and then polishing
+                        the edges so others can use them comfortably.
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section id="experience" class="section alt">
+            <div class="section-header">
+                <h2>Experience Timeline</h2>
+                <p>Click on a card to expand details.</p>
+            </div>
+
+            <div id="timeline" class="timeline">
+                <!-- Filled by data.js -->
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects" class="section">
+            <div class="section-header">
+                <h2>Projects</h2>
+                <p>Filter and explore a few representative projects.</p>
+            </div>
+
+            <div class="projects-controls">
+                <button class="chip active" data-filter="all">All</button>
+                <button class="chip" data-filter="systems">Systems</button>
+                <button class="chip" data-filter="web">Web</button>
+                <button class="chip" data-filter="data">Data</button>
+            </div>
+
+            <div id="projectsGrid" class="projects-grid">
+                <!-- Filled by data.js -->
+            </div>
+        </section>
+
+
+        <!-- CASE STUDIES / PROJECT OUTLINES -->
+<section id="case-studies" class="section alt">
+  <div class="section-header">
+    <h2>Technical Project Outlines</h2>
+    <p>Detailed documentation and architecture plans for selected projects.</p>
+  </div>
+
+  <div class="projects-grid">
+    <!-- MAP C++ -->
+    <article class="project-card">
+      <a href="assets/docs/MAP-C++ FINAL PROJECT.pdf" target="_blank" rel="noreferrer">
+        <div class="project-thumb has-image">
+          <img src="assets/img/map_project.png" alt="MAP-C++ project outline" loading="lazy" />
+        </div>
+        <div class="project-content">
+          <div class="project-badge">C++ / Systems</div>
+          <div class="project-title">MAP-C++ Final Project</div>
+          <p class="project-summary">
+            Designed a deterministic high-frequency trading engine with compile-time risk checks,
+            replay verification, and adaptive intent logic across four sprints.
+          </p>
+          <span class="view-link">View PDF Outline →</span>
+        </div>
+      </a>
+    </article>
+
+    <!-- LLM RESEARCH DASHBOARD -->
+    <article class="project-card">
+      <a href="assets/docs/LLM Research Dashboard.pdf" target="_blank" rel="noreferrer">
+        <div class="project-thumb has-image">
+          <img src="assets/img/llm_dashboard.png" alt="LLM research dashboard outline" loading="lazy" />
+        </div>
+        <div class="project-content">
+          <div class="project-badge">AI / Research</div>
+          <div class="project-title">LLM Research Dashboard</div>
+          <p class="project-summary">
+            Dashboard for tracking LLM interpretability experiments and dataset evolution.
+            Includes distillation metrics, attention maps, and prompt reliability analysis.
+          </p>
+          <span class="view-link">View PDF Outline →</span>
+        </div>
+      </a>
+    </article>
+
+    <!-- SPRINT 2 PLAN -->
+    <article class="project-card">
+      <a href="assets/docs/SPRINT2.pdf" target="_blank" rel="noreferrer">
+        <div class="project-thumb has-image">
+          <img src="assets/img/sprint2.png" alt="Sprint 2 project plan" loading="lazy" />
+        </div>
+        <div class="project-content">
+          <div class="project-badge">Cloud / Architecture</div>
+          <div class="project-title">Sprint 2 Project Plan</div>
+          <p class="project-summary">
+            Multi-microservice architecture using Cloud Run, GCE, and Cloud SQL.
+            Includes composite gateway aggregation, async 202 jobs, and ETag support.
+          </p>
+          <span class="view-link">View PDF Outline →</span>
+        </div>
+      </a>
+    </article>
+  </div>
+</section>
+
+        <!-- RESEARCH -->
+<section id="research" class="section">
+  <div class="section-header">
+    <h2>Research</h2>
+    <p>Selected research written and typeset in LaTeX.</p>
+  </div>
+
+  <div class="card" style="padding: 0.8rem 0.9rem;">
+    <p class="muted">
+      You can read the paper inline below or open it in a new tab for full-screen view.
+    </p>
+
+    <!-- Inline PDF viewer -->
+    <div class="pdf-frame">
+      <object
+        data="assets/img/AviMaslowResearch.pdf"
+        type="application/pdf"
+        width="100%"
+        height="100%"
+      >
+        <p>
+          Unable to display PDF in this browser.
+          <a href="assets/img/AviMaslowResearch.pdf" target="_blank" rel="noreferrer">
+            Open the research PDF
+          </a>.
+        </p>
+      </object>
+    </div>
+
+    <div style="margin-top: 0.6rem; display: flex; justify-content: flex-end;">
+      <a
+        href="assets/img/AviMaslowResearch.pdf"
+        class="btn outline"
+        target="_blank"
+        rel="noreferrer"
+      >
+        View full PDF
+      </a>
+    </div>
+  </div>
+</section>
+
+        <!-- SKILLS -->
+        <section id="skills" class="section alt">
+            <div class="section-header">
+                <h2>Skills Radar</h2>
+                <p>Tap a ring to highlight a skill cluster.</p>
+            </div>
+
+            <div class="skills-layout">
+                <div class="radar">
+                    <button class="radar-ring active" data-skill-group="core">Core</button>
+                    <button class="radar-ring" data-skill-group="backend">Backend</button>
+                    <button class="radar-ring" data-skill-group="cloud">Cloud</button>
+                    <button class="radar-ring" data-skill-group="human">Human</button>
+                </div>
+                <div id="skillsDetail" class="skills-detail card">
+                    Choose a ring on the left to see details.
+                </div>
+            </div>
+        </section>
+
+        <!-- COURSES -->
+        <section id="courses" class="section">
+            <div class="section-header">
+                <h2>Courses</h2>
+                <p>Selected university coursework in systems, AI, and cloud.</p>
+            </div>
+
+            <div class="about-grid">
+                <article class="card about-card">
+                    <h3>Systems &amp; Programming</h3>
+                    <ul>
+                        <li>Design with C++ (taught by Professor Bjarne Stroustrup)</li>
+                        <li>Advanced Programming</li>
+                        <li>Data Structures and Algorithms</li>
+                        <li>Analysis of Algorithms</li>
+                        <li>Computers and Assembly Language</li>
+                    </ul>
+                </article>
+
+                <article class="card about-card">
+                    <h3>AI &amp; Machine Learning</h3>
+                    <ul>
+                        <li>Artificial Intelligence</li>
+                        <li>Natural Language Processing</li>
+                        <li>AI in Context</li>
+                    </ul>
+                </article>
+
+                <article class="card about-card">
+                    <h3>Data &amp; Cloud</h3>
+                    <ul>
+                        <li>Introduction to Databases</li>
+                        <li>Cloud Computing</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <!-- CERTIFICATES -->
+        <section id="certificates" class="section alt">
+            <div class="section-header">
+                <h2>Certificates</h2>
+                <p>Verified badges from AWS and CompTIA.</p>
+            </div>
+
+            <div id="certGrid" class="cert-grid">
+                <!-- Filled by main.js using data.certificates -->
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="section">
+            <div class="section-header">
+                <h2>Contact</h2>
+                <p> </p>
+            </div>
+
+            <div class="contact-grid">
+                <form
+            id="contactForm"
+            class="card contact-card"
+            action="https://formspree.io/f/meopykdp"
+            method="POST"
+        >
+            <div class="field">
+                <label for="name">Name</label>
+                <input id="name" name="name" type="text" required />
+            </div>
+
+            <div class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" required />
+            </div>
+
+            <div class="field">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+            </div>
+
+            <button type="submit" class="btn primary full">
+                Send
+            </button>
+
+            <p id="formStatus" class="form-status"></p>
+        </form>
+
+
+                <div class="card contact-card">
+                    <h3>Quick Links</h3>
+                    <ul class="link-list">
+                        <!-- LinkedIn -->
+                        <li>
+                            <img
+                                src="assets/img/linkedin.jpg"
+                                alt="LinkedIn logo"
+                                class="contact-icon"
+                            />
+                            <a
+                                href="https://www.linkedin.com/in/avi-maslow-458506300"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                LinkedIn
+                            </a>
+                        </li>
+
+                        <!-- GitHub -->
+                        <li>
+                            <img
+                                src="assets/img/github.png"
+                                alt="GitHub logo"
+                                class="contact-icon"
+                            />
+                            <a
+                                href="https://github.com/Avimaslow"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                GitHub
+                            </a>
+                        </li>
+
+                        <!-- Email -->
+                        <li>
+                            <img
+                                src="assets/img/email.png"
+                                alt="Email icon"
+                                class="contact-icon"
+                            />
+                            <button type="button" id="copyEmailBtn" class="link-button">
+                                Copy email to clipboard
+                            </button>
+                        </li>
+                    </ul>
+
+                    <p class="muted">
+                        Email: <code>avimaslow1998@gmail.com</code>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="site-footer">
+            <p>© <span id="year"></span> Avi Maslow </p>
+            <button id="scrollTopBtn" class="scroll-top" aria-label="Scroll to top">
+                <i class="fa-solid fa-arrow-up"></i>
+            </button>
+        </footer>
+    </div>
+
+    <!-- JS -->
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/effects.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
