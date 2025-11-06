@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Avi Maslow – Portfolio & Resume</title>
+    <title>Avi Maslow – Interactive Resume</title>
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -33,23 +33,35 @@
         <!-- HEADER / NAV -->
         <header class="site-header">
             <div class="logo">AM</div>
+
             <nav class="nav">
                 <button class="nav-toggle" aria-label="Toggle navigation">
                     <span></span><span></span>
+
                 </button>
                 <ul class="nav-links">
+
                     <li><a href="#hero" class="nav-link active">Home</a></li>
                     <li><a href="#about" class="nav-link">About</a></li>
-                    <li><a href="#experience" class="nav-link">Experience</a></li>
-                    <li><a href="#projects" class="nav-link">Projects</a></li>
+                    <li><a href="#experience" class="nav-link" data-comment="// optimized for low-latency environments">Experience</a></li>
+                    <li><a href="#projects" class="nav-link" data-comment="/* modular design, memory safe */">Projects</a></li>
+                    <li><a href="#research" class="nav-link">Research</a></li>
                     <li><a href="#skills" class="nav-link">Skills</a></li>
                     <li><a href="#courses" class="nav-link">Courses</a></li>
-                    <li><a href="#research" class="nav-link">Research</a></li>
-                    <li><a href="#certificates" class="nav-link">Certificates</a></li>
+                    <li><a href="#certificates" class="nav-link" data-comment="// validated at compile time">Certificates</a></li>
                     <li><a href="#contact" class="nav-link">Contact</a></li>
                 </ul>
 
             </nav>
+    <div class="focus-console">
+        <div class="focus-console-header">Initializing System Context…</div>
+        <div class="focus-console-bar">
+            <div class="focus-console-bar-fill" id="focusBarFill"></div>
+        </div>
+        <div class="focus-console-footer">
+            <span id="focusBarText">████░░░░░░░░░░░░ 0%</span>
+        </div>
+    </div>
 
         </header>
 
@@ -64,6 +76,7 @@
                     <span id="typedTitle"></span>
                     <span class="cursor">|</span>
                 </h2>
+
 
                 <p class="hero-text">
                     I build systems that are fast, reliable, and human-centered — from real-time trading engines
@@ -80,20 +93,22 @@
                 </div>
 
                 <div class="hero-stats">
-                    <div class="stat" data-target="5">
-                        <span class="stat-number">0</span>+
-                        <span class="stat-label">Major Projects</span>
-                    </div>
-                    <div class="stat" data-target="3">
-                        <span class="stat-number">0</span>+
-                        <span class="stat-label">Cloud Platforms</span>
-                    </div>
-                    <div class="stat" data-target="8">
-                        <span class="stat-number">0</span>+
-                        <span class="stat-label">Tools &amp; Stacks</span>
-                    </div>
-                </div>
-            </div>
+    <div class="stat" data-target="5">
+        <span class="stat-number">0</span>+
+        <span class="stat-label">Major Projects</span>
+    </div>
+    <div class="stat" data-target="3">
+        <span class="stat-number">0</span>+
+        <span class="stat-label">Cloud Platforms</span>
+    </div>
+    <div class="stat" data-target="8">
+        <span class="stat-number">0</span>+
+        <span class="stat-label">Tools & Stacks</span>
+    </div>
+</div>
+
+
+   </div>
 
             <div class="hero-panel">
                 <!-- Profile hover card -->
@@ -165,6 +180,7 @@
                 <article class="card about-card">
                     <h3>Profile</h3>
                     <p>
+
                         I am a builder who lives at the intersection of systems, data, and people. I enjoy working on
                         projects where technical depth and clear communication both matter.
                     </p>
@@ -200,6 +216,16 @@
                         the edges so others can use them comfortably.
                     </div>
                 </article>
+
+                                        <article class="card about-card code-easter-define">
+  <h3>Compile-Time Constants</h3>
+  <pre class="code-define-block">
+#define SUCCESS     1
+#define FAILURE     0
+#define AVI_VERSION "<span id="aviVersionTag" class="avi-version-token">v2.0</span>"
+  </pre>
+  <p class="muted">Click <code>AVI_VERSION</code> to toggle a secret build.</p>
+</article>
             </div>
         </section>
 
@@ -340,6 +366,44 @@
     </div>
   </div>
 </section>
+
+        <div class="research-projects">
+  <h3>NLP Course Projects (Google Colab)</h3>
+  <ul class="research-list">
+    <li>
+      <strong>1. Building a Simple Language Model</strong><br>
+      Step-by-step construction of a tiny neural language model: starting from a
+      bag-of-words baseline and adding positional embeddings, MLP layers, residual
+      connections, and gating to study how each architectural choice affects
+      next-token prediction.<br>
+      🔗 <a href="assets/research/Building_a_Simple_Language_Model.ipynb" target="_blank" rel="noreferrer">
+        Download Notebook Here →
+      </a>
+    </li>
+
+    <li>
+      <strong>2. Transformer + Machine Translation (Fr → En)</strong><br>
+      Implements a decoder-only Transformer for French→English translation and compares
+      it with a fine-tuned pretrained model (Helsinki-NLP OpusMT). Covers tokenization,
+      special tokens, training with cross-entropy, and evaluation of generated translations.<br>
+      🔗 <a href="assets/research/Transformer_+_Machine_Translation.ipynb" target="_blank" rel="noreferrer">
+        Download Notebook Here →
+      </a>
+    </li>
+
+    <li>
+      <strong>3. Post-Training Llama-3.2-1B on GSM8K</strong><br>
+      Post-trains a small Llama-3.2-1B model on grade-school math (GSM8K): defines an
+      evaluation loop, fine-tunes with Chain-of-Thought (CoT) reasoning, then further
+      post-trains to improve step-by-step math problem solving, tracking accuracy as the
+      model evolves.<br>
+      🔗 <a href="assets/research/Post_Training.ipynb" target="_blank" rel="noreferrer">
+        Download Notebook Here →
+      </a>
+    </li>
+  </ul>
+</div>
+
 
         <!-- SKILLS -->
         <section id="skills" class="section alt">
@@ -504,13 +568,25 @@
         </section>
 
         <!-- FOOTER -->
-        <footer class="site-footer">
-            <p>© <span id="year"></span> Avi Maslow </p>
-            <button id="scrollTopBtn" class="scroll-top" aria-label="Scroll to top">
-                <i class="fa-solid fa-arrow-up"></i>
-            </button>
-        </footer>
+<footer class="site-footer terminal-footer">
+  <div class="terminal-body">
+    <div class="terminal-line">[avi@portfolio]$ ./thanks</div>
+    <div class="terminal-line">Output: Thank you for visiting!</div>
+    <div class="terminal-line">
+      Uptime: <span id="uptimeValue">00:00:00</span>
     </div>
+    <div class="terminal-line dim">
+      © <span id="year"></span> Avi Maslow
+    </div>
+  </div>
+
+  <button id="scrollTopBtn" class="scroll-top" aria-label="Scroll to top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+</footer>
+
+    <div id="leakLayer"></div>
+
 
     <!-- JS -->
     <script src="assets/js/data.js"></script>

@@ -980,7 +980,7 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
     .hero {
         grid-template-columns: minmax(0, 1fr);
     }
@@ -1262,4 +1262,195 @@ body {
     .pdf-frame {
         height: 320px;
     }
+}
+.focus-console {
+  /* ❌ remove absolute positioning */
+  position: static;        /* or just delete 'position' line entirely */
+  margin-left: 1rem;       /* small gap from the nav */
+
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  font-family: "SF Mono", monospace;
+  font-size: 0.7rem;
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+  width: 155px;
+}
+
+.focus-console-header {
+  font-size: 0.68rem;
+  margin-bottom: 0.15rem;
+  letter-spacing: 0.02em;
+}
+
+.focus-console-bar {
+  width: 120px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0.2rem 0;
+}
+
+.focus-console-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #facc15, #f59e0b);
+  transition: width 0.1s ease-out;
+}
+
+.focus-console-footer {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.65rem;
+  letter-spacing: 0.02em;
+}
+
+
+.nav-link[data-comment] {
+    position: relative;
+}
+
+.nav-link[data-comment]::after {
+    content: attr(data-comment);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    bottom: -1.4rem;
+    white-space: nowrap;
+    font-family: "SF Mono", monospace;
+    font-size: 0.7rem;
+    background: rgba(15, 23, 42, 0.95);
+    color: #9ca3af;
+    padding: 0.2rem 0.4rem;
+    border-radius: 6px;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 120ms ease-out, transform 120ms ease-out;
+    z-index: 15;
+}
+
+.nav-link[data-comment]:hover::after,
+.nav-link[data-comment]:focus-visible::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+.code-define-block {
+    font-family: "SF Mono", monospace;
+    font-size: 0.78rem;
+    background: rgba(15, 23, 42, 0.96);
+    border-radius: 10px;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    overflow-x: auto;
+}
+
+.avi-version-token {
+    color: var(--accent);
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+}
+.avi-version-token:hover {
+    color: #fbbf24;
+}
+
+
+.terminal-footer {
+    font-family: "SF Mono", monospace;
+    background: radial-gradient(circle at top, rgba(15,23,42,0.8), rgba(15,23,42,1));
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.terminal-body {
+    display: grid;
+    gap: 0.15rem;
+}
+
+.terminal-line {
+    font-size: 0.78rem;
+    color: #e5e7eb;
+}
+
+.terminal-line.dim {
+    color: #9ca3af;
+}
+
+
+#leakLayer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 900;
+}
+
+.leak-bubble {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.8);
+    box-shadow: 0 0 8px rgba(148, 163, 184, 0.7);
+    animation: leakRise 1.2s linear forwards;
+}
+
+.leak-text {
+    position: absolute;
+    font-family: "SF Mono", monospace;
+    font-size: 0.7rem;
+    color: rgba(248, 250, 252, 0.9);
+    animation: leakFade 1.4s ease-out forwards;
+}
+
+@keyframes leakRise {
+    from { transform: translateY(0); opacity: 0.9; }
+    to   { transform: translateY(-80px); opacity: 0; }
+}
+
+@keyframes leakFade {
+    from { opacity: 0; transform: translateY(-10px); }
+    30%  { opacity: 1; }
+    to   { opacity: 0; transform: translateY(-30px); }
+}
+.research-projects {
+  margin-top: 1.2rem;
+}
+
+.research-list {
+  list-style: none;
+  padding-left: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.research-list li {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.research-list strong {
+  font-size: 0.9rem;
+}
+
+.research-list a {
+  color: #facc15;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.research-list a:hover {
+  text-decoration: underline;
 }

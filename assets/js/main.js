@@ -110,8 +110,81 @@ document.addEventListener("DOMContentLoaded", () => {
     renderWorking();
 
 
+/* ----- #define Easter egg ----- */
+const aviVersionEl = document.getElementById("aviVersionTag");
+if (aviVersionEl) {
+    let toggled = false;
+    aviVersionEl.addEventListener("click", () => {
+        toggled = !toggled;
+        aviVersionEl.textContent = toggled ? 'v3.0 (Your\'re Hired!)' : 'v2.0';
+    });
+}
 
 
+/* ----- Terminal uptime ----- */
+const uptimeEl = document.getElementById("uptimeValue");
+const startTime = Date.now();
+if (uptimeEl) {
+    setInterval(() => {
+        const diff = Date.now() - startTime;
+        const totalSec = Math.floor(diff / 1000);
+        const h = Math.floor(totalSec / 3600);
+        const m = Math.floor((totalSec % 3600) / 60);
+        const s = totalSec % 60;
+        uptimeEl.textContent =
+            `${h.toString().padStart(2, "0")}:` +
+            `${m.toString().padStart(2, "0")}:` +
+            `${s.toString().padStart(2, "0")}`;
+    }, 1000);
+}
+
+
+/* ----- "Memory leak" scroll easter egg ----- */
+const leakLayer = document.getElementById("leakLayer");
+let lastScrollY = window.scrollY;
+let lastScrollTime = Date.now();
+let lastLeakTextTime = 0;
+
+function spawnLeaks() {
+    if (!leakLayer) return;
+
+    // small bubbles
+    for (let i = 0; i < 5; i++) {
+        const bubble = document.createElement("div");
+        bubble.className = "leak-bubble";
+        bubble.style.left = `${Math.random() * 100}%`;
+        bubble.style.bottom = "-10px";
+        leakLayer.appendChild(bubble);
+        setTimeout(() => bubble.remove(), 1200);
+    }
+
+    // occasional delete[] leaks; text
+    const now = Date.now();
+    if (now - lastLeakTextTime > 2500) {
+        lastLeakTextTime = now;
+        const text = document.createElement("div");
+        text.className = "leak-text";
+        text.textContent = "delete[] leaks;";
+        text.style.left = `${10 + Math.random() * 70}%`;
+        text.style.bottom = "40px";
+        leakLayer.appendChild(text);
+        setTimeout(() => text.remove(), 1400);
+    }
+}
+
+window.addEventListener("scroll", () => {
+    const now = Date.now();
+    const dy = Math.abs(window.scrollY - lastScrollY);
+    const dt = now - lastScrollTime || 1;
+    const speed = dy / dt; // px per ms
+
+    if (speed > 0.6) { // tweak threshold for how "fast" scroll is
+        spawnLeaks();
+    }
+
+    lastScrollY = window.scrollY;
+    lastScrollTime = now;
+});
 
     /* ----- Dynamic Title Typing Effect ----- */
     const typedEl = document.getElementById("typedTitle");
@@ -316,6 +389,33 @@ card.innerHTML = `
         { threshold: 0.4 }
     );
     statEls.forEach((el) => statsObserver.observe(el));
+    /* ----- C++ "Allocating focus memory" console ----- */
+ // ----- Scroll-linked progress console -----
+const focusBarFill = document.getElementById("focusBarFill");
+const focusBarText = document.getElementById("focusBarText");
+
+if (focusBarFill && focusBarText) {
+  function updateFocusProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = Math.min(1, scrollTop / docHeight);
+    const percent = Math.round(scrolled * 100);
+
+    // Update bar width
+    focusBarFill.style.width = `${percent}%`;
+
+    // Build fake “█░” text bar (20 slots)
+    const totalBlocks = 20;
+    const filled = Math.round((percent / 100) * totalBlocks);
+    const barText = "█".repeat(filled) + "░".repeat(totalBlocks - filled);
+
+    focusBarText.textContent = `${barText} ${percent}%`;
+  }
+
+  window.addEventListener("scroll", updateFocusProgress);
+  updateFocusProgress(); // initialize on load
+}
+
 
     /* ----- Contact Form (demo only) ----- */
 /* ----- Contact Form (GitHub Pages + Form service) ----- */
