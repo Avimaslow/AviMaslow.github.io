@@ -93,13 +93,13 @@ window.resumeData = {
             link: "https://github.com/Avimaslow/Windows11Dashboard"
         },
         {
-            name: "SOGR - State of Good Repair ",
+            name: "DWTS – Dancing with the Stars Analysis",
             type: "data",
-            role: "Report Owner",
-            summary: "Interactive views for assets ready for upgrades.",
-            tech: ["Power BI", "Excel", "ServiceNow"],
-            image: "assets/img/SOGR.png",
-            link: "https://github.com/Avimaslow/SOGR"
+            role: "Data Analyst",
+            summary: "Statistical and visual analysis of judge scoring patterns across seasons using Python regression models.",
+            tech: ["Python", "Pandas", "Matplotlib", "Seaborn", "StatsModels"],
+            image: "assets/img/dwts.png",
+            link: "https://github.com/Avimaslow/DWTS/tree/main"
         },
         {
             name: "Broadway Where",
