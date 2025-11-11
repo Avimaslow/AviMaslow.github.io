@@ -722,11 +722,12 @@ if (contactForm && formStatus) {
             if (statusEl) statusEl.textContent = "Querying AI agent…";
 
             const res = await fetch(AI_2048_ENDPOINT, {
-                method: "POST",
-                mode: "cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ board: board2048 })
-            });
+    method: "POST",
+    mode: "cors",
+    headers: { "Content-Type": "text/plain" },
+    body: JSON.stringify({ board: board2048 })
+});
+
 
             console.log("2048 AI response status:", res.status);
 
