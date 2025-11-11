@@ -668,8 +668,54 @@ if (contactForm && formStatus) {
         while (result.length < 4) result.push(0);
         return result;
     }
+        let gameOver = false;
 
-    function applyMove(direction) {
+    function getMaxTile(board) {
+        let max = 0;
+        for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+                if (board[r][c] > max) max = board[r][c];
+            }
+        }
+        return max;
+    }
+
+    function hasMoves(board) {
+        // Any empty cell?
+        for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+                if (board[r][c] === 0) return true;
+            }
+        }
+        // Any mergeable neighbors (right / down)?
+        for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+                const v = board[r][c];
+                if (c + 1 < 4 && board[r][c + 1] === v) return true;
+                if (r + 1 < 4 && board[r + 1][c] === v) return true;
+            }
+        }
+        return false;
+    }
+
+    function checkGameOver() {
+        if (!hasMoves(board2048)) {
+            gameOver = true;
+            const maxTile = getMaxTile(board2048);
+            if (statusEl) {
+                statusEl.textContent = `Good game – AI reached tile ${maxTile}.`;
+            }
+            // Stop auto-play if it’s running
+            if (autoInterval) {
+                clearInterval(autoInterval);
+                autoInterval = null;
+                if (btnAuto) btnAuto.textContent = "Auto-play (AI)";
+            }
+        }
+    }
+
+        function applyMove(direction) {
+        if (gameOver) return;  // don’t move if game is already over
         // direction: "UP", "DOWN", "LEFT", "RIGHT"
         let moved = false;
 
@@ -709,6 +755,7 @@ if (contactForm && formStatus) {
             spawnRandomTile();
         }
         render2048();
+        checkGameOver();
     }
 
      async function get2048MoveFromAI() {
@@ -790,7 +837,7 @@ if (contactForm && formStatus) {
         });
     }
 
-    if (btnReset) {
+        if (btnReset) {
         btnReset.addEventListener("click", () => {
             board2048 = [
                 [0, 0, 0, 0],
@@ -798,6 +845,7 @@ if (contactForm && formStatus) {
                 [0, 0, 0, 0],
                 [0, 0, 0, 0]
             ];
+            gameOver = false;
             spawnRandomTile();
             spawnRandomTile();
             render2048();
@@ -805,18 +853,21 @@ if (contactForm && formStatus) {
         });
     }
 
+
     // initial setup
-    if (gridEl) {
+        if (gridEl) {
         board2048 = [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
             [0, 0, 0, 0],
             [0, 0, 0, 0]
         ];
+        gameOver = false;
         spawnRandomTile();
         spawnRandomTile();
         render2048();
     }
+
 
 
 });
