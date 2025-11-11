@@ -711,28 +711,52 @@ if (contactForm && formStatus) {
         render2048();
     }
 
-    async function get2048MoveFromAI() {
+     async function get2048MoveFromAI() {
         if (!AI_2048_ENDPOINT) {
             console.warn("AI_2048_ENDPOINT not set");
+            if (statusEl) statusEl.textContent = "AI endpoint not configured.";
             return null;
         }
+
         try {
             if (statusEl) statusEl.textContent = "Querying AI agent…";
+
             const res = await fetch(AI_2048_ENDPOINT, {
                 method: "POST",
+                mode: "cors",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ board: board2048 })
             });
-            const json = await res.json();
+
+            console.log("2048 AI response status:", res.status);
+
+            const rawText = await res.text();
+            console.log("2048 AI raw body:", rawText);
+
+            if (!res.ok) {
+                if (statusEl) statusEl.textContent = `Backend error: ${res.status}`;
+                return null;
+            }
+
+            let json;
+            try {
+                json = JSON.parse(rawText);
+            } catch (e) {
+                console.error("Failed to parse JSON from backend:", e);
+                if (statusEl) statusEl.textContent = "Bad JSON from backend.";
+                return null;
+            }
+
             const move = json.move;
             if (statusEl) statusEl.textContent = `AI chose: ${move}`;
             return move;
         } catch (err) {
-            console.error(err);
+            console.error("Network / CORS error contacting AI:", err);
             if (statusEl) statusEl.textContent = "Error contacting AI backend.";
             return null;
         }
     }
+
 
     if (btnStep) {
         btnStep.addEventListener("click", async () => {
