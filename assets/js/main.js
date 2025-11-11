@@ -3,6 +3,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const data = window.resumeData;
      /* ----- "Now working on" mini player ----- */
+    const AI_2048_ENDPOINT = "https://rl7x5wjdzgf4x44jf4omjjrq2u0flowe.lambda-url.us-east-1.on.aws/";
 
     const workingTitle = document.getElementById("workingTitle");
     const workingSubtitle = document.getElementById("workingSubtitle");
@@ -602,4 +603,195 @@ if (contactForm && formStatus) {
             link.classList.toggle("active", id === current);
         });
     });
+
+
+    /* ----- 2048 AI Integration ----- */
+    const gridEl = document.getElementById("game2048Grid");
+    const statusEl = document.getElementById("ai2048Status");
+    const btnStep = document.getElementById("ai2048Step");
+    const btnAuto = document.getElementById("ai2048Auto");
+    const btnReset = document.getElementById("ai2048Reset");
+
+    // Simple front-end board (4x4)
+    let board2048 = [
+        [0, 2, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+    ];
+
+    function render2048() {
+        if (!gridEl) return;
+        gridEl.innerHTML = "";
+        for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+                const v = board2048[r][c];
+                const cell = document.createElement("div");
+                cell.className = `grid-2048-cell val-${v}`;
+                cell.textContent = v === 0 ? "" : v;
+                gridEl.appendChild(cell);
+            }
+        }
+    }
+
+    function randomEmptyCell() {
+        const empty = [];
+        for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+                if (board2048[r][c] === 0) empty.push([r, c]);
+            }
+        }
+        if (!empty.length) return null;
+        return empty[Math.floor(Math.random() * empty.length)];
+    }
+
+    function spawnRandomTile() {
+        const cell = randomEmptyCell();
+        if (!cell) return;
+        const [r, c] = cell;
+        board2048[r][c] = Math.random() < 0.9 ? 2 : 4;
+    }
+
+    function slideAndMerge(row) {
+        const filtered = row.filter(v => v !== 0);
+        const result = [];
+        let i = 0;
+        while (i < filtered.length) {
+            if (i + 1 < filtered.length && filtered[i] === filtered[i + 1]) {
+                result.push(filtered[i] * 2);
+                i += 2;
+            } else {
+                result.push(filtered[i]);
+                i += 1;
+            }
+        }
+        while (result.length < 4) result.push(0);
+        return result;
+    }
+
+    function applyMove(direction) {
+        // direction: "UP", "DOWN", "LEFT", "RIGHT"
+        let moved = false;
+
+        if (direction === "LEFT" || direction === 2) {
+            for (let r = 0; r < 4; r++) {
+                const before = board2048[r].slice();
+                const after = slideAndMerge(before);
+                board2048[r] = after;
+                if (before.toString() !== after.toString()) moved = true;
+            }
+        } else if (direction === "RIGHT" || direction === 3) {
+            for (let r = 0; r < 4; r++) {
+                const before = board2048[r].slice().reverse();
+                const after = slideAndMerge(before).reverse();
+                if (board2048[r].toString() !== after.toString()) moved = true;
+                board2048[r] = after;
+            }
+        } else if (direction === "UP" || direction === 0) {
+            for (let c = 0; c < 4; c++) {
+                const col = [board2048[0][c], board2048[1][c], board2048[2][c], board2048[3][c]];
+                const before = col.slice();
+                const after = slideAndMerge(col);
+                for (let r = 0; r < 4; r++) board2048[r][c] = after[r];
+                if (before.toString() !== after.toString()) moved = true;
+            }
+        } else if (direction === "DOWN" || direction === 1) {
+            for (let c = 0; c < 4; c++) {
+                const col = [board2048[0][c], board2048[1][c], board2048[2][c], board2048[3][c]].reverse();
+                const before = col.slice();
+                const after = slideAndMerge(col).reverse();
+                for (let r = 0; r < 4; r++) board2048[r][c] = after[r];
+                if (before.toString() !== after.toString()) moved = true;
+            }
+        }
+
+        if (moved) {
+            spawnRandomTile();
+        }
+        render2048();
+    }
+
+    async function get2048MoveFromAI() {
+        if (!AI_2048_ENDPOINT) {
+            console.warn("AI_2048_ENDPOINT not set");
+            return null;
+        }
+        try {
+            if (statusEl) statusEl.textContent = "Querying AI agent…";
+            const res = await fetch(AI_2048_ENDPOINT, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ board: board2048 })
+            });
+            const json = await res.json();
+            const move = json.move;
+            if (statusEl) statusEl.textContent = `AI chose: ${move}`;
+            return move;
+        } catch (err) {
+            console.error(err);
+            if (statusEl) statusEl.textContent = "Error contacting AI backend.";
+            return null;
+        }
+    }
+
+    if (btnStep) {
+        btnStep.addEventListener("click", async () => {
+            const move = await get2048MoveFromAI();
+            if (!move) return;
+            applyMove(move);
+        });
+    }
+
+    let autoInterval = null;
+    if (btnAuto) {
+        btnAuto.addEventListener("click", async () => {
+            if (autoInterval) {
+                clearInterval(autoInterval);
+                autoInterval = null;
+                btnAuto.textContent = "Auto-play (AI)";
+                return;
+            }
+            btnAuto.textContent = "Stop auto-play";
+            autoInterval = setInterval(async () => {
+                const move = await get2048MoveFromAI();
+                if (!move) {
+                    clearInterval(autoInterval);
+                    autoInterval = null;
+                    btnAuto.textContent = "Auto-play (AI)";
+                    return;
+                }
+                applyMove(move);
+            }, 800);
+        });
+    }
+
+    if (btnReset) {
+        btnReset.addEventListener("click", () => {
+            board2048 = [
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]
+            ];
+            spawnRandomTile();
+            spawnRandomTile();
+            render2048();
+            if (statusEl) statusEl.textContent = "Game reset.";
+        });
+    }
+
+    // initial setup
+    if (gridEl) {
+        board2048 = [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
+        ];
+        spawnRandomTile();
+        spawnRandomTile();
+        render2048();
+    }
+
+
 });

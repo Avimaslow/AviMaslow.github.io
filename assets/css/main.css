@@ -1454,3 +1454,69 @@ body {
 .research-list a:hover {
   text-decoration: underline;
 }
+/* 2048 Grid */
+.grid-2048 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: var(--radius-lg);
+  padding: 0.6rem;
+  border: 1px solid var(--card-border);
+}
+
+.grid-2048-cell {
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--muted);
+}
+
+.grid-2048-cell.val-0 {
+  background: rgba(15, 23, 42, 0.6);
+  color: rgba(148, 163, 184, 0.4);
+}
+
+.grid-2048-cell.val-2,
+.grid-2048-cell.val-4 {
+  background: rgba(55, 65, 81, 0.9);
+  color: #e5e7eb;
+}
+
+.grid-2048-cell.val-8,
+.grid-2048-cell.val-16 {
+  background: #f97316;
+  color: #111827;
+}
+
+.grid-2048-cell.val-32,
+.grid-2048-cell.val-64 {
+  background: #ea580c;
+  color: #111827;
+}
+
+.grid-2048-cell.val-128,
+.grid-2048-cell.val-256 {
+  background: #facc15;
+  color: #111827;
+}
+
+.grid-2048-cell.val-512,
+.grid-2048-cell.val-1024,
+.grid-2048-cell.val-2048 {
+  background: #22c55e;
+  color: #022c22;
+}
+
+.ai-2048-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
