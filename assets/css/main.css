@@ -1463,7 +1463,10 @@ body {
   border-radius: var(--radius-lg);
   padding: 0.6rem;
   border: 1px solid var(--card-border);
+  max-width: 340px;
+  margin: 0 auto;
 }
+
 
 .grid-2048-cell {
   aspect-ratio: 1 / 1;
@@ -1519,4 +1522,23 @@ body {
   gap: 0.5rem;
   margin-top: 0.6rem;
 }
+/* ---- Section Divider ---- */
+.section-divider {
+  width: 60%;
+  margin: 5rem auto 3rem auto;
+  border: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 215, 0, 0.6),
+    transparent
+  );
+  opacity: 0.8;
+}
 
+#ai-2048 .section-header h2 {
+  background: linear-gradient(90deg, #facc15, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
