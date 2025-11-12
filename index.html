@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Avi Maslow's Resume</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avi Maslow's Resume</title>
 
-    <!-- Fonts & Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"
-    />
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-        integrity="sha512-iPtn3VZWuW7FJcO3eN4sb3faUuS4cw/8XrZ2w6+5VgMiLQ0R6+7gZpLlJEU3bCwqV2bH/rjZr3g7xwT8r9j7Ww=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
-    />
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="assets/css/reset.css" />
-    <link rel="stylesheet" href="assets/css/main.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-iPtn3VZWuW7FJcO3eN4sb3faUuS4cw/8XrZ2w6+5VgMiLQ0R6+7gZpLlJEU3bCwqV2bH/rjZr3g7xwT8r9j7Ww=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/reset.css" />
+  <link rel="stylesheet" href="assets/css/main.css" />
 </head>
-<body>
-    <!-- Starfield background (fades on scroll) -->
-    <div id="starfield"></div>
 
-    <!-- Page wrapper -->
-    <div class="page">
+<body>
+  <!-- Starfield background (canvas must be inside <body>) -->
+    <canvas id="starfield-left"></canvas>
+  <canvas id="starfield-right"></canvas>
+
+  <!-- Page wrapper -->
+  <div class="page">
         <!-- HEADER / NAV -->
         <header class="site-header">
             <div class="logo">AM</div>
@@ -296,9 +297,20 @@
 <section id="sudoku" class="section alt">
   <div class="section-header">
     <h2>Sudoku AI Solver</h2>
-    <p>
-      Backtracking + constraint propagation Sudoku solver running privately on AWS Lambda.
-    </p>
+      <p class="muted" style="max-width: 600px; margin-top: 0.5rem;">
+  <strong>Backtracking + Constraint Propagation Sudoku Solver</strong><br>
+  Runs privately on an AWS Lambda backend, none of your inputs are stored or shared with anyone.
+</p>
+
+<ul style="margin-top: 0.75rem; line-height: 1.6;">
+  <li><strong>Click any box</strong> in the grid to type your own numbers (1–9). Leave blanks empty — they’re treated as zeros.</li>
+  <li>Or click <strong>“Load Demo Puzzle”</strong> to see an example puzzle.</li>
+  <li>Then press <strong>“AI Solve”</strong> — the board fills instantly with the computed solution.</li>
+  <li>If the puzzle has no valid solution, you’ll see <em>“This Sudoku puzzle is not solvable.”</em></li>
+  <li>Use <strong>“Clear”</strong> anytime to reset or load a new puzzle.</li>
+</ul>
+
+
   </div>
 
   <div class="card sudoku-card">
@@ -628,12 +640,15 @@
         </section>
 
         <!-- FOOTER -->
-<footer class="site-footer terminal-footer">
-  <div class="terminal-body">
-    <div class="terminal-line">[avi@portfolio]$ ./thanks</div>
-    <div class="terminal-line">Output: Thank you for visiting!</div>
-    <div class="terminal-line">
-      Uptime: <span id="uptimeValue">00:00:00</span>
+ <div class="starwars-crawl"><div>
+<footer id="terminalFooter">
+  <div>[avi@portfolio]$ ./THANKS</div>
+  <div>OUTPUT: THANK YOU FOR VISITING!</div>
+  <div>UPTIME: <span id="uptimeValue">00:00:00</span></div>
+  <div>© 2025 AVI MASLOW</div>
+  <span class="cursor"></span>
+</footer>
+</div></div>
     </div>
     <div class="terminal-line dim">
       © <span id="year"></span> Avi Maslow
@@ -649,8 +664,9 @@
 
 
     <!-- JS -->
-    <script src="assets/js/data.js"></script>
-    <script src="assets/js/effects.js"></script>
-    <script src="assets/js/main.js"></script>
+  <script src="assets/js/starfield-sides.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/effects.js"></script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>

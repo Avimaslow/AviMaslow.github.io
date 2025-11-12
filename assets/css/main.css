@@ -1607,3 +1607,100 @@ body {
     font-size: 0.8rem;
   }
 }
+/* Starfield canvas sits behind everything */
+/* Starfields positioned on left and right sides */
+#starfield-left,
+#starfield-right {
+  position: fixed;
+  top: 0;
+  width: 12vw;           /* width of the starfield bands */
+  height: 100vh;
+  display: block;
+  background: black;
+  z-index: 0;             /* behind everything else */
+}
+
+#starfield-left {
+  left: 0;
+}
+
+#starfield-right {
+  right: 0;
+}
+
+/* main page content stays on top */
+.page, .site-header {
+  position: relative;
+  z-index: 1;
+  background: rgba(0,0,0,0); /* optional transparency */
+}
+
+
+/* ==== Star Wars-style footer console ==== */
+#terminalFooter {
+  font-family: 'Orbitron', sans-serif;
+  color: #ffe81f;                  /* classic yellow */
+  text-shadow:
+      0 0 4px #ffe81f,
+      0 0 10px #ffd700,
+      0 0 20px #ffea00;            /* glowing edges */
+  background: transparent;
+  text-align: center;
+  padding: 1.5rem 0;
+  letter-spacing: 1px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  z-index: 2;
+}
+
+/* ==== Subtle Star Wars-style footer console ==== */
+#terminalFooter {
+  font-family: 'Orbitron', sans-serif;
+  color: #ffd95b;                 /* warmer, softer yellow-gold */
+  text-shadow:
+      0 0 2px #d4a017,
+      0 0 6px rgba(255, 217, 91, 0.4),
+      0 0 12px rgba(255, 217, 91, 0.25);
+  background: transparent;
+  text-align: center;
+  padding: 1.5rem 0;
+  letter-spacing: 0.5px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  z-index: 2;
+  opacity: 0.95;                 /* slightly dimmer overall */
+}
+
+/* softer blinking cursor
+#terminalFooter span.cursor {
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  background: #ffd95b;
+  margin-left: 4px;
+  border-radius: 1px;
+  animation: blink 1.2s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+*/
+
+@keyframes crawl {
+  0%   { transform: translateY(100%); }
+  100% { transform: translateY(-100%); }
+}
+
+.starwars-crawl {
+  perspective: 400px;
+  overflow: hidden;
+  height: 300px;
+}
+
+.starwars-crawl div {
+  transform-origin: 50% 100%;
+  animation: crawl 60s linear infinite;
+  transform: rotateX(25deg) translateZ(0);
+}
