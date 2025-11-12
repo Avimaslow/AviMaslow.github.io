@@ -1542,3 +1542,68 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+
+/* Sudoku UI */
+.sudoku-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.sudoku-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 0;
+  max-width: 360px;
+  margin: 0 auto;
+  border: 2px solid rgba(148, 163, 184, 0.4);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sudoku-cell {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.sudoku-cell::placeholder {
+  color: rgba(148, 163, 184, 0.5);
+}
+
+.sudoku-cell:focus {
+  background: rgba(30, 64, 175, 0.7);
+}
+
+/* thicker lines between 3x3 blocks */
+.sudoku-cell.block-right {
+  border-right-width: 2px;
+}
+.sudoku-cell.block-bottom {
+  border-bottom-width: 2px;
+}
+
+.sudoku-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+/* smaller on mobile */
+@media (max-width: 600px) {
+  .sudoku-grid {
+    max-width: 300px;
+  }
+  .sudoku-cell {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+}

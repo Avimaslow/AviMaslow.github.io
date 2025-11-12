@@ -293,6 +293,30 @@
   </div>
 </section>
 
+<section id="sudoku" class="section alt">
+  <div class="section-header">
+    <h2>Sudoku AI Solver</h2>
+    <p>
+      Backtracking + constraint propagation Sudoku solver running privately on AWS Lambda.
+    </p>
+  </div>
+
+  <div class="card sudoku-card">
+    <div id="sudokuGrid" class="sudoku-grid">
+      <!-- JS will generate 9×9 cells -->
+    </div>
+
+    <div class="sudoku-controls">
+      <button id="sudokuExample" class="btn ghost">Load demo puzzle</button>
+      <button id="sudokuClear" class="btn outline">Clear</button>
+      <button id="sudokuSolve" class="btn primary">AI Solve</button>
+    </div>
+
+    <p id="sudokuStatus" class="muted" style="margin-top: 0.5rem;">
+      Enter a puzzle (0 or blank = empty), then click “AI Solve”.
+    </p>
+  </div>
+</section>
 
 
 
