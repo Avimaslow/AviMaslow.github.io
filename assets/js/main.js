@@ -2,8 +2,10 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     const data = window.resumeData;
-     /* ----- "Now working on" mini player ----- */
+
+    /* ----- "Now working on" mini player ----- */
     const AI_2048_ENDPOINT = "https://rl7x5wjdzgf4x44jf4omjjrq2u0flowe.lambda-url.us-east-1.on.aws/";
+    const SUDOKU_ENDPOINT = "https://wa5vwfrteqcckupaxdcyltsjqe0ueuwq.lambda-url.us-east-1.on.aws/";
 
     const workingTitle = document.getElementById("workingTitle");
     const workingSubtitle = document.getElementById("workingSubtitle");
@@ -43,13 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
         let currentSeconds;
 
         if (n === 1) {
-            // only one item – just pin it at start
             currentSeconds = 0;
         } else {
-            // we want:
-            // index 0 -> 0:00
-            // last index -> 3:22
-            // everything else evenly spaced between
             const fraction = workingIndex / (n - 1); // 0 .. 1
             currentSeconds = TOTAL_SECONDS * fraction;
         }
@@ -83,10 +80,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         updateTimeAndProgress();
 
-        // slide animation
         if (heroPlayerMain && direction) {
             heroPlayerMain.classList.remove("anim-left", "anim-right");
-            void heroPlayerMain.offsetWidth; // restart animation
+            void heroPlayerMain.offsetWidth;
             heroPlayerMain.classList.add(direction === "next" ? "anim-left" : "anim-right");
         }
     }
@@ -107,85 +103,79 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // initial render
     renderWorking();
 
+    /* ----- #define Easter egg ----- */
+    const aviVersionEl = document.getElementById("aviVersionTag");
+    if (aviVersionEl) {
+        let toggled = false;
+        aviVersionEl.addEventListener("click", () => {
+            toggled = !toggled;
+            aviVersionEl.textContent = toggled ? "v3.0 (You’re Hired!)" : "v2.0";
+        });
+    }
 
-/* ----- #define Easter egg ----- */
-const aviVersionEl = document.getElementById("aviVersionTag");
-if (aviVersionEl) {
-    let toggled = false;
-    aviVersionEl.addEventListener("click", () => {
-        toggled = !toggled;
-        aviVersionEl.textContent = toggled ? 'v3.0 (Your\'re Hired!)' : 'v2.0';
+    /* ----- Terminal uptime ----- */
+    const uptimeEl = document.getElementById("uptimeValue");
+    const startTime = Date.now();
+    if (uptimeEl) {
+        setInterval(() => {
+            const diff = Date.now() - startTime;
+            const totalSec = Math.floor(diff / 1000);
+            const h = Math.floor(totalSec / 3600);
+            const m = Math.floor((totalSec % 3600) / 60);
+            const s = totalSec % 60;
+            uptimeEl.textContent =
+                `${h.toString().padStart(2, "0")}:` +
+                `${m.toString().padStart(2, "0")}:` +
+                `${s.toString().padStart(2, "0")}`;
+        }, 1000);
+    }
+
+    /* ----- "Memory leak" scroll easter egg ----- */
+    const leakLayer = document.getElementById("leakLayer");
+    let lastScrollY = window.scrollY;
+    let lastScrollTime = Date.now();
+    let lastLeakTextTime = 0;
+
+    function spawnLeaks() {
+        if (!leakLayer) return;
+
+        for (let i = 0; i < 5; i++) {
+            const bubble = document.createElement("div");
+            bubble.className = "leak-bubble";
+            bubble.style.left = `${Math.random() * 100}%`;
+            bubble.style.bottom = "-10px";
+            leakLayer.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 1200);
+        }
+
+        const now = Date.now();
+        if (now - lastLeakTextTime > 2500) {
+            lastLeakTextTime = now;
+            const text = document.createElement("div");
+            text.className = "leak-text";
+            text.textContent = "delete[] leaks;";
+            text.style.left = `${10 + Math.random() * 70}%`;
+            text.style.bottom = "40px";
+            leakLayer.appendChild(text);
+            setTimeout(() => text.remove(), 1400);
+        }
+    }
+
+    window.addEventListener("scroll", () => {
+        const now = Date.now();
+        const dy = Math.abs(window.scrollY - lastScrollY);
+        const dt = now - lastScrollTime || 1;
+        const speed = dy / dt;
+
+        if (speed > 0.6) {
+            spawnLeaks();
+        }
+
+        lastScrollY = window.scrollY;
+        lastScrollTime = now;
     });
-}
-
-
-/* ----- Terminal uptime ----- */
-const uptimeEl = document.getElementById("uptimeValue");
-const startTime = Date.now();
-if (uptimeEl) {
-    setInterval(() => {
-        const diff = Date.now() - startTime;
-        const totalSec = Math.floor(diff / 1000);
-        const h = Math.floor(totalSec / 3600);
-        const m = Math.floor((totalSec % 3600) / 60);
-        const s = totalSec % 60;
-        uptimeEl.textContent =
-            `${h.toString().padStart(2, "0")}:` +
-            `${m.toString().padStart(2, "0")}:` +
-            `${s.toString().padStart(2, "0")}`;
-    }, 1000);
-}
-
-
-/* ----- "Memory leak" scroll easter egg ----- */
-const leakLayer = document.getElementById("leakLayer");
-let lastScrollY = window.scrollY;
-let lastScrollTime = Date.now();
-let lastLeakTextTime = 0;
-
-function spawnLeaks() {
-    if (!leakLayer) return;
-
-    // small bubbles
-    for (let i = 0; i < 5; i++) {
-        const bubble = document.createElement("div");
-        bubble.className = "leak-bubble";
-        bubble.style.left = `${Math.random() * 100}%`;
-        bubble.style.bottom = "-10px";
-        leakLayer.appendChild(bubble);
-        setTimeout(() => bubble.remove(), 1200);
-    }
-
-    // occasional delete[] leaks; text
-    const now = Date.now();
-    if (now - lastLeakTextTime > 2500) {
-        lastLeakTextTime = now;
-        const text = document.createElement("div");
-        text.className = "leak-text";
-        text.textContent = "delete[] leaks;";
-        text.style.left = `${10 + Math.random() * 70}%`;
-        text.style.bottom = "40px";
-        leakLayer.appendChild(text);
-        setTimeout(() => text.remove(), 1400);
-    }
-}
-
-window.addEventListener("scroll", () => {
-    const now = Date.now();
-    const dy = Math.abs(window.scrollY - lastScrollY);
-    const dt = now - lastScrollTime || 1;
-    const speed = dy / dt; // px per ms
-
-    if (speed > 0.6) { // tweak threshold for how "fast" scroll is
-        spawnLeaks();
-    }
-
-    lastScrollY = window.scrollY;
-    lastScrollTime = now;
-});
 
     /* ----- Dynamic Title Typing Effect ----- */
     const typedEl = document.getElementById("typedTitle");
@@ -288,37 +278,35 @@ window.addEventListener("scroll", () => {
         );
         filtered.forEach((p) => {
             const card = document.createElement("article");
-card.className = "project-card";
-card.dataset.type = p.type;
+            card.className = "project-card";
+            card.dataset.type = p.type;
 
-const href = p.link || "#";
+            const href = p.link || "#";
 
-card.innerHTML = `
-    <a href="${href}" class="project-link" target="_blank" rel="noreferrer">
-        <div class="project-thumb ${p.image ? "has-image" : ""}">
-            ${
-                p.image
-                    ? `<img src="${p.image}" alt="${p.name} screenshot" loading="lazy" />`
-                    : ""
-            }
-            <div class="project-thumb-overlay">
-                <span>${p.link ? "View on GitHub" : "Preview"}</span>
-            </div>
-        </div>
+            card.innerHTML = `
+                <a href="${href}" class="project-link" target="_blank" rel="noreferrer">
+                    <div class="project-thumb ${p.image ? "has-image" : ""}">
+                        ${
+                            p.image
+                                ? `<img src="${p.image}" alt="${p.name} screenshot" loading="lazy" />`
+                                : ""
+                        }
+                        <div class="project-thumb-overlay">
+                            <span>${p.link ? "View on GitHub" : "Preview"}</span>
+                        </div>
+                    </div>
 
-        <div class="project-content">
-            <div class="project-badge">${p.type.toUpperCase()}</div>
-            <div class="project-title">${p.name}</div>
-            <div class="project-meta">${p.role}</div>
-            <p class="project-summary">${p.summary}</p>
-            <div class="project-tech">
-                ${p.tech.map((t) => `<span>${t}</span>`).join("")}
-            </div>
-        </div>
-    </a>
-`;
-
-
+                    <div class="project-content">
+                        <div class="project-badge">${p.type.toUpperCase()}</div>
+                        <div class="project-title">${p.name}</div>
+                        <div class="project-meta">${p.role}</div>
+                        <p class="project-summary">${p.summary}</p>
+                        <div class="project-tech">
+                            ${p.tech.map((t) => `<span>${t}</span>`).join("")}
+                        </div>
+                    </div>
+                </a>
+            `;
 
             projectsGrid.appendChild(card);
         });
@@ -357,7 +345,6 @@ card.innerHTML = `
             renderSkill(ring.dataset.skillGroup);
         });
     });
-    // default
     renderSkill("core");
 
     /* ----- Animated Stats Counters ----- */
@@ -390,72 +377,68 @@ card.innerHTML = `
         { threshold: 0.4 }
     );
     statEls.forEach((el) => statsObserver.observe(el));
+
     /* ----- C++ "Allocating focus memory" console ----- */
- // ----- Scroll-linked progress console -----
-const focusBarFill = document.getElementById("focusBarFill");
-const focusBarText = document.getElementById("focusBarText");
+    const focusBarFill = document.getElementById("focusBarFill");
+    const focusBarText = document.getElementById("focusBarText");
 
-if (focusBarFill && focusBarText) {
-  function updateFocusProgress() {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrolled = Math.min(1, scrollTop / docHeight);
-    const percent = Math.round(scrolled * 100);
+    if (focusBarFill && focusBarText) {
+        function updateFocusProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = Math.min(1, scrollTop / docHeight);
+            const percent = Math.round(scrolled * 100);
 
-    // Update bar width
-    focusBarFill.style.width = `${percent}%`;
+            focusBarFill.style.width = `${percent}%`;
 
-    // Build fake “█░” text bar (20 slots)
-    const totalBlocks = 20;
-    const filled = Math.round((percent / 100) * totalBlocks);
-    const barText = "█".repeat(filled) + "░".repeat(totalBlocks - filled);
+            const totalBlocks = 20;
+            const filled = Math.round((percent / 100) * totalBlocks);
+            const barText = "█".repeat(filled) + "░".repeat(totalBlocks - filled);
 
-    focusBarText.textContent = `${barText} ${percent}%`;
-  }
+            focusBarText.textContent = `${barText} ${percent}%`;
+        }
 
-  window.addEventListener("scroll", updateFocusProgress);
-  updateFocusProgress(); // initialize on load
-}
+        window.addEventListener("scroll", updateFocusProgress);
+        updateFocusProgress();
+    }
 
+    /* ----- Contact Form (GitHub Pages + Form service) ----- */
+    const contactForm = document.getElementById("contactForm");
+    const formStatus = document.getElementById("formStatus");
 
-    /* ----- Contact Form (demo only) ----- */
-/* ----- Contact Form (GitHub Pages + Form service) ----- */
-const contactForm = document.getElementById("contactForm");
-const formStatus = document.getElementById("formStatus");
+    if (contactForm && formStatus) {
+        contactForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
 
-if (contactForm && formStatus) {
-    contactForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
+            formStatus.textContent = "Sending…";
+            formStatus.classList.remove("error", "success");
 
-        formStatus.textContent = "Sending…";
-        formStatus.classList.remove("error", "success");
+            try {
+                const formData = new FormData(contactForm);
 
-        try {
-            const formData = new FormData(contactForm);
+                const response = await fetch(contactForm.action, {
+                    method: contactForm.method,
+                    body: formData,
+                    headers: {
+                        Accept: "application/json"
+                    }
+                });
 
-            const response = await fetch(contactForm.action, {
-                method: contactForm.method,
-                body: formData,
-                headers: {
-                    Accept: "application/json"
+                if (response.ok) {
+                    formStatus.textContent = "Thanks! Your message has been sent.";
+                    formStatus.classList.add("success");
+                    contactForm.reset();
+                } else {
+                    formStatus.textContent =
+                        "Hmm, something went wrong. Please try again later.";
+                    formStatus.classList.add("error");
                 }
-            });
-
-            if (response.ok) {
-                formStatus.textContent = "Thanks! Your message has been sent.";
-                formStatus.classList.add("success");
-                contactForm.reset();
-            } else {
-                formStatus.textContent = "Hmm, something went wrong. Please try again later.";
+            } catch (err) {
+                formStatus.textContent = "Unable to send right now. Check your connection.";
                 formStatus.classList.add("error");
             }
-        } catch (err) {
-            formStatus.textContent = "Unable to send right now. Check your connection.";
-            formStatus.classList.add("error");
-        }
-    });
-}
-
+        });
+    }
 
     /* ----- Copy Email Button ----- */
     const copyEmailBtn = document.getElementById("copyEmailBtn");
@@ -493,15 +476,13 @@ if (contactForm && formStatus) {
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-        /* ----- Resume Button (actual file) ----- */
-        const viewResumeBtn = document.getElementById("viewResumeBtn");
-        if (viewResumeBtn) {
-            viewResumeBtn.addEventListener("click", () => {
-                // Open the resume in a new tab
-                window.open("assets/img/AviMaslowResume2026.pdf", "_blank");
-            });
-        }
-
+    /* ----- Resume Button ----- */
+    const viewResumeBtn = document.getElementById("viewResumeBtn");
+    if (viewResumeBtn) {
+        viewResumeBtn.addEventListener("click", () => {
+            window.open("assets/img/AviMaslowResume2026.pdf", "_blank");
+        });
+    }
 
     /* ----- Theme Toggle (dark / light) ----- */
     const themeToggle = document.getElementById("themeToggle");
@@ -579,10 +560,17 @@ if (contactForm && formStatus) {
         });
     }
 
-
     // Update active nav link on scroll
-    const sectionIds = ["hero", "about", "experience", "projects", "skills", "courses", "certificates", "contact"];
-
+    const sectionIds = [
+        "hero",
+        "about",
+        "experience",
+        "projects",
+        "skills",
+        "courses",
+        "certificates",
+        "contact"
+    ];
 
     const sectionEls = sectionIds
         .map((id) => document.getElementById(id))
@@ -604,7 +592,6 @@ if (contactForm && formStatus) {
         });
     });
 
-
     /* ----- 2048 AI Integration ----- */
     const gridEl = document.getElementById("game2048Grid");
     const statusEl = document.getElementById("ai2048Status");
@@ -612,7 +599,6 @@ if (contactForm && formStatus) {
     const btnAuto = document.getElementById("ai2048Auto");
     const btnReset = document.getElementById("ai2048Reset");
 
-    // Simple front-end board (4x4)
     let board2048 = [
         [0, 2, 0, 0],
         [0, 0, 0, 0],
@@ -653,7 +639,7 @@ if (contactForm && formStatus) {
     }
 
     function slideAndMerge(row) {
-        const filtered = row.filter(v => v !== 0);
+        const filtered = row.filter((v) => v !== 0);
         const result = [];
         let i = 0;
         while (i < filtered.length) {
@@ -668,7 +654,8 @@ if (contactForm && formStatus) {
         while (result.length < 4) result.push(0);
         return result;
     }
-        let gameOver = false;
+
+    let gameOver = false;
 
     function getMaxTile(board) {
         let max = 0;
@@ -681,13 +668,11 @@ if (contactForm && formStatus) {
     }
 
     function hasMoves(board) {
-        // Any empty cell?
         for (let r = 0; r < 4; r++) {
             for (let c = 0; c < 4; c++) {
                 if (board[r][c] === 0) return true;
             }
         }
-        // Any mergeable neighbors (right / down)?
         for (let r = 0; r < 4; r++) {
             for (let c = 0; c < 4; c++) {
                 const v = board[r][c];
@@ -705,7 +690,6 @@ if (contactForm && formStatus) {
             if (statusEl) {
                 statusEl.textContent = `Good game – AI reached tile ${maxTile}.`;
             }
-            // Stop auto-play if it’s running
             if (autoInterval) {
                 clearInterval(autoInterval);
                 autoInterval = null;
@@ -714,9 +698,8 @@ if (contactForm && formStatus) {
         }
     }
 
-        function applyMove(direction) {
-        if (gameOver) return;  // don’t move if game is already over
-        // direction: "UP", "DOWN", "LEFT", "RIGHT"
+    function applyMove(direction) {
+        if (gameOver) return;
         let moved = false;
 
         if (direction === "LEFT" || direction === 2) {
@@ -735,7 +718,12 @@ if (contactForm && formStatus) {
             }
         } else if (direction === "UP" || direction === 0) {
             for (let c = 0; c < 4; c++) {
-                const col = [board2048[0][c], board2048[1][c], board2048[2][c], board2048[3][c]];
+                const col = [
+                    board2048[0][c],
+                    board2048[1][c],
+                    board2048[2][c],
+                    board2048[3][c]
+                ];
                 const before = col.slice();
                 const after = slideAndMerge(col);
                 for (let r = 0; r < 4; r++) board2048[r][c] = after[r];
@@ -743,7 +731,12 @@ if (contactForm && formStatus) {
             }
         } else if (direction === "DOWN" || direction === 1) {
             for (let c = 0; c < 4; c++) {
-                const col = [board2048[0][c], board2048[1][c], board2048[2][c], board2048[3][c]].reverse();
+                const col = [
+                    board2048[0][c],
+                    board2048[1][c],
+                    board2048[2][c],
+                    board2048[3][c]
+                ].reverse();
                 const before = col.slice();
                 const after = slideAndMerge(col).reverse();
                 for (let r = 0; r < 4; r++) board2048[r][c] = after[r];
@@ -758,7 +751,7 @@ if (contactForm && formStatus) {
         checkGameOver();
     }
 
-     async function get2048MoveFromAI() {
+    async function get2048MoveFromAI() {
         if (!AI_2048_ENDPOINT) {
             console.warn("AI_2048_ENDPOINT not set");
             if (statusEl) statusEl.textContent = "AI endpoint not configured.";
@@ -769,12 +762,11 @@ if (contactForm && formStatus) {
             if (statusEl) statusEl.textContent = "Querying AI agent…";
 
             const res = await fetch(AI_2048_ENDPOINT, {
-    method: "POST",
-    mode: "cors",
-    headers: { "Content-Type": "text/plain" },
-    body: JSON.stringify({ board: board2048 })
-});
-
+                method: "POST",
+                mode: "cors",
+                headers: { "Content-Type": "text/plain" },
+                body: JSON.stringify({ board: board2048 })
+            });
 
             console.log("2048 AI response status:", res.status);
 
@@ -804,7 +796,6 @@ if (contactForm && formStatus) {
             return null;
         }
     }
-
 
     if (btnStep) {
         btnStep.addEventListener("click", async () => {
@@ -837,7 +828,7 @@ if (contactForm && formStatus) {
         });
     }
 
-        if (btnReset) {
+    if (btnReset) {
         btnReset.addEventListener("click", () => {
             board2048 = [
                 [0, 0, 0, 0],
@@ -853,9 +844,7 @@ if (contactForm && formStatus) {
         });
     }
 
-
-    // initial setup
-        if (gridEl) {
+    if (gridEl) {
         board2048 = [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
@@ -868,6 +857,143 @@ if (contactForm && formStatus) {
         render2048();
     }
 
+    /* ----- Sudoku AI Solver ----- */
+    const sudokuGridEl = document.getElementById("sudokuGrid");
+    const sudokuStatusEl = document.getElementById("sudokuStatus");
+    const sudokuSolveBtn = document.getElementById("sudokuSolve");
+    const sudokuClearBtn = document.getElementById("sudokuClear");
+    const sudokuExampleBtn = document.getElementById("sudokuExample");
 
+    // multiple demo puzzles to rotate through
+    const demoPuzzles = [
+        "530070000600195000098000060800060003400803001700020006060000280000419005000080079",
+        "003020600900305001001806400008102900700000008006708200002609500800203009005010300",
+        "200080300060070084030500209000105408000000000402706000301007040720040060004010003"
+    ];
+    let demoIndex = 0;
 
+    const sudokuInputs = [];
+
+    function buildSudokuGrid() {
+        if (!sudokuGridEl) return;
+        sudokuGridEl.innerHTML = "";
+        sudokuInputs.length = 0; // make sure it's empty
+
+        for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 9; c++) {
+                const inp = document.createElement("input");
+                inp.type = "text";
+                inp.maxLength = 1;
+                inp.inputMode = "numeric";
+                inp.placeholder = "0";
+                inp.className = "sudoku-cell";
+
+                if ((c + 1) % 3 === 0 && c !== 8) {
+                    inp.classList.add("block-right");
+                }
+                if ((r + 1) % 3 === 0 && r !== 8) {
+                    // you could add a bottom border class here if you want
+                }
+
+                inp.addEventListener("input", () => {
+                    const v = inp.value.replace(/[^1-9]/g, "");
+                    inp.value = v.slice(0, 1);
+                });
+
+                sudokuGridEl.appendChild(inp);
+                sudokuInputs.push(inp);
+            }
+        }
+    }
+
+    function loadPuzzleFromString(puzzle) {
+        if (puzzle.length !== 81 || sudokuInputs.length !== 81) return;
+        for (let i = 0; i < 81; i++) {
+            const ch = puzzle[i];
+            sudokuInputs[i].value = ch === "0" ? "" : ch;
+        }
+    }
+
+    function readPuzzleString() {
+        let s = "";
+        for (let i = 0; i < sudokuInputs.length; i++) {
+            const v = sudokuInputs[i].value.trim();
+            s += v === "" ? "0" : v;
+        }
+        return s;
+    }
+
+    function showSolution(solution) {
+        if (!solution || solution.length !== 81) return;
+        for (let i = 0; i < 81; i++) {
+            sudokuInputs[i].value = solution[i];
+        }
+    }
+
+    async function callSudokuAI(puzzleStr) {
+        try {
+            if (sudokuStatusEl) {
+                sudokuStatusEl.textContent = "Solving puzzle with AI…";
+            }
+            const res = await fetch(SUDOKU_ENDPOINT, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ board: puzzleStr })
+            });
+            const json = await res.json();
+            if (!res.ok) {
+                console.error("Sudoku error:", json);
+                if (sudokuStatusEl) {
+                    sudokuStatusEl.textContent = json.error || "Error solving puzzle.";
+                }
+                return null;
+            }
+            if (sudokuStatusEl) {
+                sudokuStatusEl.textContent = "Solved!";
+            }
+            return json.solution;
+        } catch (err) {
+            console.error("Sudoku network error:", err);
+            if (sudokuStatusEl) {
+                sudokuStatusEl.textContent = "Error contacting Sudoku backend.";
+            }
+            return null;
+        }
+    }
+
+    if (sudokuGridEl) {
+        buildSudokuGrid();
+        // load first demo puzzle on page load
+        loadPuzzleFromString(demoPuzzles[0]);
+        if (sudokuStatusEl) {
+            sudokuStatusEl.textContent = "Loaded demo puzzle. Click AI Solve.";
+        }
+    }
+
+    if (sudokuClearBtn) {
+        sudokuClearBtn.addEventListener("click", () => {
+            sudokuInputs.forEach((inp) => (inp.value = ""));
+            if (sudokuStatusEl) sudokuStatusEl.textContent = "Cleared board.";
+        });
+    }
+
+    if (sudokuExampleBtn) {
+        sudokuExampleBtn.addEventListener("click", () => {
+            const puzzle = demoPuzzles[demoIndex];
+            loadPuzzleFromString(puzzle);
+            if (sudokuStatusEl) {
+                sudokuStatusEl.textContent = `Loaded demo puzzle #${demoIndex + 1}. Click AI Solve.`;
+            }
+            demoIndex = (demoIndex + 1) % demoPuzzles.length;
+        });
+    }
+
+    if (sudokuSolveBtn) {
+        sudokuSolveBtn.addEventListener("click", async () => {
+            const puzzleStr = readPuzzleString();
+            if (puzzleStr.length !== 81) return;
+            const sol = await callSudokuAI(puzzleStr);
+            if (sol) showSolution(sol);
+        });
+    }
 });
