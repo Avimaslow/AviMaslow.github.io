@@ -931,35 +931,42 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function callSudokuAI(puzzleStr) {
-        try {
+    try {
+        if (sudokuStatusEl) {
+            sudokuStatusEl.textContent = "Solving puzzle with AI…";
+        }
+        const res = await fetch(SUDOKU_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ board: puzzleStr })
+        });
+
+        const json = await res.json();
+
+        if (!res.ok) {
+            console.error("Sudoku error:", json);
             if (sudokuStatusEl) {
-                sudokuStatusEl.textContent = "Solving puzzle with AI…";
-            }
-            const res = await fetch(SUDOKU_ENDPOINT, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ board: puzzleStr })
-            });
-            const json = await res.json();
-            if (!res.ok) {
-                console.error("Sudoku error:", json);
-                if (sudokuStatusEl) {
-                    sudokuStatusEl.textContent = json.error || "Error solving puzzle.";
-                }
-                return null;
-            }
-            if (sudokuStatusEl) {
-                sudokuStatusEl.textContent = "Solved!";
-            }
-            return json.solution;
-        } catch (err) {
-            console.error("Sudoku network error:", err);
-            if (sudokuStatusEl) {
-                sudokuStatusEl.textContent = "Error contacting Sudoku backend.";
+                sudokuStatusEl.textContent =
+                    json && json.error
+                        ? json.error    // <-- "This Sudoku puzzle is not solvable."
+                        : "Error solving puzzle.";
             }
             return null;
         }
+
+        if (sudokuStatusEl) {
+            sudokuStatusEl.textContent = "Solved!";
+        }
+        return json.solution;
+    } catch (err) {
+        console.error("Sudoku network error:", err);
+        if (sudokuStatusEl) {
+            sudokuStatusEl.textContent = "Error contacting Sudoku backend.";
+        }
+        return null;
     }
+}
+
 
     if (sudokuGridEl) {
         buildSudokuGrid();
