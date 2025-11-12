@@ -9,8 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet" />
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -23,48 +22,46 @@
   <link rel="stylesheet" href="assets/css/reset.css" />
   <link rel="stylesheet" href="assets/css/main.css" />
 </head>
-
 <body>
-  <!-- Starfield background (canvas must be inside <body>) -->
-    <canvas id="starfield-left"></canvas>
+  <!-- Starfield canvases behind everything -->
+  <canvas id="starfield-left"></canvas>
   <canvas id="starfield-right"></canvas>
 
-  <!-- Page wrapper -->
-  <div class="page">
-        <!-- HEADER / NAV -->
-        <header class="site-header">
-            <div class="logo">AM</div>
+  <!-- SINGLE, GLOBAL HEADER (outside .page) -->
+  <header class="site-header">
+    <div class="logo">AM</div>
 
-            <nav class="nav">
-                <button class="nav-toggle" aria-label="Toggle navigation">
-                    <span></span><span></span>
+    <nav class="nav">
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <span></span><span></span>
+      </button>
 
-                </button>
-                <ul class="nav-links">
+      <ul class="nav-links">
+        <li><a href="#hero" class="nav-link active">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#experience" class="nav-link" data-comment="// optimized for low-latency environments">Experience</a></li>
+        <li><a href="#projects" class="nav-link" data-comment="/* modular design, memory safe */">Projects</a></li>
+        <li><a href="#research" class="nav-link">Research</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#courses" class="nav-link">Courses</a></li>
+        <li><a href="#certificates" class="nav-link" data-comment="// validated at compile time">Certificates</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
 
-                    <li><a href="#hero" class="nav-link active">Home</a></li>
-                    <li><a href="#about" class="nav-link">About</a></li>
-                    <li><a href="#experience" class="nav-link" data-comment="// optimized for low-latency environments">Experience</a></li>
-                    <li><a href="#projects" class="nav-link" data-comment="/* modular design, memory safe */">Projects</a></li>
-                    <li><a href="#research" class="nav-link">Research</a></li>
-                    <li><a href="#skills" class="nav-link">Skills</a></li>
-                    <li><a href="#courses" class="nav-link">Courses</a></li>
-                    <li><a href="#certificates" class="nav-link" data-comment="// validated at compile time">Certificates</a></li>
-                    <li><a href="#contact" class="nav-link">Contact</a></li>
-                </ul>
-
-            </nav>
     <div class="focus-console">
-        <div class="focus-console-header">Initializing System Context…</div>
-        <div class="focus-console-bar">
-            <div class="focus-console-bar-fill" id="focusBarFill"></div>
-        </div>
-        <div class="focus-console-footer">
-            <span id="focusBarText">████░░░░░░░░░░░░ 0%</span>
-        </div>
+      <div class="focus-console-header">Initializing System Context…</div>
+      <div class="focus-console-bar">
+        <div class="focus-console-bar-fill" id="focusBarFill"></div>
+      </div>
+      <div class="focus-console-footer">
+        <span id="focusBarText">████░░░░░░░░░░░░ 0%</span>
+      </div>
     </div>
+  </header>
 
-        </header>
+  <!-- Page wrapper (everything else goes inside here) -->
+  <div class="page">
 
         <!-- HERO -->
         <section id="hero" class="section hero">
@@ -639,22 +636,22 @@
             </div>
         </section>
 
-        <!-- FOOTER -->
- <div class="starwars-crawl"><div>
-<footer id="terminalFooter">
-  <div>[avi@portfolio]$ ./THANKS</div>
-  <div>OUTPUT: THANK YOU FOR VISITING!</div>
-  <div>UPTIME: <span id="uptimeValue">00:00:00</span></div>
-  <div>© 2025 AVI MASLOW</div>
-  <span class="cursor"></span>
-</footer>
-</div></div>
-    </div>
-    <div class="terminal-line dim">
-      © <span id="year"></span> Avi Maslow
-    </div>
+<div class="starwars-crawl">
+  <div>
+    <footer id="terminalFooter">
+      <div>[avi@portfolio]$ ./THANKS</div>
+      <div>OUTPUT: THANK YOU FOR VISITING!</div>
+      <div>UPTIME: <span id="uptimeValue">00:00:00</span></div>
+      <div>© 2025 AVI MASLOW</div>
+      <span class="cursor"></span>
+    </footer>
   </div>
+</div>
 
+<footer class="site-footer">
+  <div class="terminal-line dim">
+    © <span id="year"></span> Avi Maslow
+  </div>
   <button id="scrollTopBtn" class="scroll-top" aria-label="Scroll to top">
     <i class="fa-solid fa-arrow-up"></i>
   </button>

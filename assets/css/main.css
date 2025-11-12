@@ -28,18 +28,12 @@ body.light {
 
 /* Starfield (fades on scroll) */
 #starfield {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.12) 0, transparent 40%),
-        radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.09) 0, transparent 45%),
-        radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.06) 0, transparent 40%),
-        #02020a;
-    opacity: 1;
-    transition: opacity 0.3s ease-out;
+  position: fixed;
+  inset: 0;
+  z-index: -1;  /* stays behind the header and content */
+  pointer-events: none;
 }
+
 
 /* Layout */
 body {
@@ -57,7 +51,52 @@ body {
     padding: 1.25rem 1.25rem 3rem;
 }
 
-/* Header */
+:root { --header-h: 56px; } /* a bit tighter than 64px */
+
+.site-header{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  z-index: 2000;                 /* above all content */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.9rem;        /* slightly smaller padding */
+  margin: 0;
+  border-bottom: 1px solid var(--card-border);
+  /* subtle, less “droopy” gradient */
+  backdrop-filter: blur(14px);
+  background:
+    linear-gradient(to bottom,
+      rgba(5,5,16,0.92) 0%,
+      rgba(5,5,16,0.78) 65%,
+      rgba(5,5,16,0.00) 100%);
+}
+
+/* push page down exactly the header height so nothing hides underneath */
+.page{ padding-top: calc(var(--header-h) + 14px); }
+
+/* mobile dropdown still positions right under the fixed header */
+@media (max-width: 700px){
+  .nav-links{
+    position: absolute;
+    right: 1.25rem;
+    top: calc(var(--header-h) - 2px);
+  }
+}
+
+
+/* Mobile dropdown still positions correctly under fixed header */
+@media (max-width: 700px) {
+  .nav-links {
+    position: absolute;
+    right: 1.25rem;
+    top: calc(var(--header-h) - 4px);
+    /* …rest of your styles… */
+  }
+}
+
+/* Header
 .site-header {
     position: sticky;
     top: 0;
@@ -75,7 +114,7 @@ body {
         transparent
     );
 }
-
+*/
 .logo {
     width: 36px;
     height: 36px;
@@ -1607,51 +1646,26 @@ body {
     font-size: 0.8rem;
   }
 }
-/* Starfield canvas sits behind everything */
 /* Starfields positioned on left and right sides */
 #starfield-left,
 #starfield-right {
   position: fixed;
   top: 0;
-  width: 12vw;           /* width of the starfield bands */
+  width: 12vw;
   height: 100vh;
   display: block;
   background: black;
-  z-index: 0;             /* behind everything else */
+  z-index: -1;           /* push behind header & content */
+  pointer-events: none;  /* ignore mouse/touch */
 }
 
-#starfield-left {
-  left: 0;
-}
-
-#starfield-right {
-  right: 0;
-}
-
-/* main page content stays on top */
-.page, .site-header {
-  position: relative;
-  z-index: 1;
-  background: rgba(0,0,0,0); /* optional transparency */
-}
+#starfield-left { left: 0; }
+#starfield-right { right: 0; }
 
 
-/* ==== Star Wars-style footer console ==== */
-#terminalFooter {
-  font-family: 'Orbitron', sans-serif;
-  color: #ffe81f;                  /* classic yellow */
-  text-shadow:
-      0 0 4px #ffe81f,
-      0 0 10px #ffd700,
-      0 0 20px #ffea00;            /* glowing edges */
-  background: transparent;
-  text-align: center;
-  padding: 1.5rem 0;
-  letter-spacing: 1px;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  z-index: 2;
-}
+
+
+
 
 /* ==== Subtle Star Wars-style footer console ==== */
 #terminalFooter {
