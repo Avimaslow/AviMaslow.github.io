@@ -84,13 +84,13 @@ window.resumeData = {
             link: "https://github.com/orgs/nyc-study-project/repositories"
         },
         {
-            name: "Windows 11 Upgrade Dashboard",
+            name: "Cruise Review NLP Analyzer",
             type: "data",
-            role: "Report Owner",
-            summary: "Interactive views for asset readiness and upgrade progress across agencies.",
-            tech: ["Power BI", "Excel", "ServiceNow"],
-            image: "assets/img/Win11Dashboard.png",
-            link: "https://github.com/Avimaslow/Windows11Dashboard"
+            role: "Developer",
+            summary: "NLP pipeline for scraping, cleaning, and analyzing cruise reviews to identify themes, sentiment, and traveler insights.",
+            tech: ["Python", "BeautifulSoup", "Pandas", "NLTK"],
+            image: "assets/img/CruiseNLP.png",
+            link: "https://github.com/Avimaslow/cruise-nlp-project"
         },
         {
             name: "DWTS – Dancing with the Stars Analysis",
